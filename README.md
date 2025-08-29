@@ -54,5 +54,4 @@ Now open your browser and go to:
 
 ### 👤 Author
 Made by **`Krish Zinzuvadiya & Team`**
-
 All rights reserved.
