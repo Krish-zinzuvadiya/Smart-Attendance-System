@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #1f4037, #99f2c8);
+            color: #fff;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin: 5px 0;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            width: 80%;
+            background-color: rgba(255, 255, 255, 0.3);
+            margin: 30px 0;
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            resize: vertical;
+        }
+
+        textarea::placeholder {
+            color: #ccc;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #00c9a7;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #00b89f;
+        }
+
+        .warning {
+            color: #ffcccc;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .sentiment {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            color: #ffe;
+        }
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .messages li {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .messages .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Welcome, {{ student.name }}</h2>
+    <p>Enrollment No: {{ student.enrollment_no }}</p>
+    <p>Roll No: {{ student.roll_no }}</p>
+    <p>Lectures Attended: {{ student.attended }}</p>
+    <p>Total Lectures Conducted: {{ student.conducted }}</p>
+    <p>Attendance Percentage: {{ student.percentage }}%</p>
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if student.percentage < 70 %}
+        <hr>
+        <p class="warning">⚠️ Your attendance is below 70%. Please fill the form below.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <label for="reason">Why is your attendance low?</label>
+            <textarea name="reason" rows="4" cols="50" required>{{ student.reason_for_low_attendance|default:"" }}</textarea><br><br>
+            <button type="submit">Submit</button>
+        </form>
+    {% endif %}
+    <hr>
+<h3>📅 Your Scheduled Classes</h3>
+
+{% if scheduled_classes %}
+  <ul>
+    {% for class in scheduled_classes %}
+      <li>
+        <strong>{{ class.title }}</strong> - {{ class.date }} 
+        ({{ class.start_time }} - {{ class.end_time }})  
+        | Conducted by: {{ class.conducted_by }}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No classes scheduled for you 🚫</p>
+{% endif %}
+
+
+    {% if student.s_score is not None %}
+        <hr>
+        <div class="sentiment">
+            <p><strong>Your Sentiment Score:</strong> {{ student.s_score|floatformat:2 }}</p>
+        </div>
+    {% endif %}
+
+    {% if student.reason_for_low_attendance %}
+        <hr>
+        <div class="sentiment">
+            <p><strong>Your Reason for Low Attendance:</strong></p>
+            <p>{{ student.reason_for_low_attendance }}</p>
+        </div>
+    {% endif %}
+</body>
+
+</html>
+
