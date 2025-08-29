@@ -19,5 +19,3 @@ If you want to create it manually, use:
 
 ```bash
 django-admin startproject smart_attendance
-
-
