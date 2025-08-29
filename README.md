@@ -19,8 +19,5 @@ If you want to create it manually, use:
 
 ```bash
 django-admin startproject smart_attendance
-'''
-### 2️⃣ Create Django App
 
-The main application is named attendance.
-To create it, run:
+
