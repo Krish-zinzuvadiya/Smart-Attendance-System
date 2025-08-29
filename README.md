@@ -53,5 +53,5 @@ Now open your browser and go to:
 👉 http://127.0.0.1:8000/
 
 ### 👤 Author
-Made by **`Krish Zinzuvadiya & Team`**
+Made by **`Krish Zinzuvadiya & Team`**<br>
 All rights reserved.
